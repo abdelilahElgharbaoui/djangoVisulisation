@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'proba',
     'pyt',
     'vis',
-    'test'
+    'test',
+    'qcm',
+    'qcmdj'
 ]
 
 MIDDLEWARE = [

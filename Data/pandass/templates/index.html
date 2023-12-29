@@ -1,7 +1,7 @@
 
 {% extends 'base.html' %}
 
-{% block title %}Other Page{% endblock %}
+{% block title %}Pandas{% endblock %}
 
 
 {% block content %}
@@ -128,6 +128,9 @@
                                 />
                                 <label class="form-check-label" for="{{ column }}">
                                   {{ column }}
+                                   {% if column in numerical %}
+                                      <span style="color: red; font-size: small;">numerical</span>
+                                  {% endif %}
                                 </label>
                               </div>
                               {% endfor %}
@@ -235,7 +238,9 @@
                                 <label for="group">Group by</label>
                                 <select class="form-control" id="group" name="group">
                                   {% for col in columns %}
-                                  <option value="{{ col }}">{{ col }}</option>
+                                  <option value="{{ col }}">{{ col }}
+                                     
+                                  </option>
                                   {% endfor %}
                                 </select>
                                 <label for="dropdown2">Columns</label>
@@ -251,6 +256,9 @@
                                   />
                                   <label class="form-check-label" style="margin-left: 40px" for="{{ column }}">
                                     {{ column }}
+                                    {% if column in numerical %}
+                                          <span style="color: red; font-size: small;">numerical</span>
+                                      {% endif %}
                                   </label>
                                 </div>
                                 {% endfor %}

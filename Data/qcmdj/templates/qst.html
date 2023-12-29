@@ -1,0 +1,97 @@
+<!-- qcm/templates/qcm/questions.html -->
+{% extends 'base.html' %}
+
+{% block title %}QCM{% endblock %}
+
+
+{% block content %}
+{% load static %}
+
+<style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        fieldset {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        legend {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<!-- qcm/templates/qcm/questions.html -->
+<form method="post" action="{% url 'questions' %}">
+    {% csrf_token %}
+    {% for question in questions %}
+        <fieldset>
+            <legend>{{ question.text }}</legend>
+            {% for choice in question.choice_set.all %}
+                <label>
+                    <input type="checkbox" name="choices" value="{{ choice.id }}">
+                    {{ choice.text }}
+                </label><br>
+            {% endfor %}
+        </fieldset>
+    {% endfor %}
+    <input type="submit" value="Submit" id="submitBtn">
+</form>
+
+
+<script>
+    document.getElementById('submitBtn').addEventListener('click', function () {
+        // Simulate a delay to show a loading state
+        setTimeout(function () {
+            // Check if the answers are correct and change the color
+            checkAnswers();
+        }, 500);
+    });
+
+    function checkAnswers() {
+        // Assuming you have a way to determine correct answers on the server side
+        // You might want to make an AJAX request to the server to validate answers
+
+        // For demonstration purposes, let's assume the answers are correct
+        const areAnswersCorrect = true;
+
+        // Change the background color based on correctness
+        const form = document.querySelector('form');
+        if (areAnswersCorrect) {
+            form.style.backgroundColor = '#8BC34A';  // Green color
+        } else {
+            form.style.backgroundColor = '#FF5722';  // Red color
+        }
+    }
+</script>
+
+{% endblock %}

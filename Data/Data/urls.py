@@ -23,4 +23,6 @@ urlpatterns = [
     path('vis/', include('vis.urls')),
     path('test/', include('test.urls')), 
     path('proba/', include('proba.urls')), 
+    path('qcm/', include('qcm.urls')), 
+    path('qc/', include('qcmdj.urls')), 
 ]

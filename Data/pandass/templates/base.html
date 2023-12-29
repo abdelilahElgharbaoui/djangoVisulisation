@@ -84,7 +84,7 @@
     <button class="nav-link btn" onclick="location.href='{% url 'test' %}'"><i class="typcn typcn-chart-bar-outline"></i> Lois de Probabilité</button>
   </li>
   <li class="nav-item" id="btnQCM">
-    <button class="nav-link btn" onclick="location.href='{% url 'test' %}'"><i class="typcn typcn-book"></i> QCM</button>
+    <button class="nav-link btn" onclick="location.href='{% url 'questions' %}'"><i class="typcn typcn-book"></i> QCM</button>
   </li>
 </ul>
 
@@ -343,7 +343,7 @@ $(document).ready(function () {
         $('#btnLois').addClass('active ');
     } else if (currentUrl.includes('test'.toLowerCase())) {
         $('#btnTest').addClass('active ');
-    } else if (currentUrl.includes('show'.toLowerCase())) {
+    } else if (currentUrl.includes('questions'.toLowerCase())) {
         $('#btnQCM').addClass('active ');
     }else if (currentUrl === '/') {
         $('#btnShow').addClass('active ');

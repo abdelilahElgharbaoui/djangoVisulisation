@@ -35,7 +35,29 @@ from django.http import HttpResponseServerError
 #     print("heeeeeeeeeeeeeeeeeeeeere")
 #     return render(request, 'chart_view.html',context )
 
+def calculate_statistics(df, selected_column_name2):
+    # Calculate your custom statistics
+    mean_value = df[selected_column_name2].mean()
+    median_value = df[selected_column_name2].median()
+    mode_value = df[selected_column_name2].mode().iloc[0]
+    range_value = df[selected_column_name2].max() - df[selected_column_name2].min()
+    variance_value = df[selected_column_name2].var()
+    std_deviation_value = df[selected_column_name2].std()
+    count_value = df[selected_column_name2].count()
 
+    # Create a dictionary to store the statistics
+    statistics_dict = {
+        'Moyenne': mean_value,
+        'Médiane': median_value,
+        'Mode': mode_value,
+        'Variance': variance_value,
+        'Écart-type': std_deviation_value,
+        'Nombre': count_value,
+    }
+
+    # Convert the dictionary to a DataFrame for better formatting
+    statistics_df = pd.DataFrame(list(statistics_dict.items()), columns=[f'Statistic {selected_column_name2}', 'Value'])
+    return statistics_df.to_html(classes='table table-striped table-bordered', index=False)
 
 
 
@@ -96,6 +118,14 @@ def show(request):
             context['lendata'] = len(df)
             context['selected'] = filename1
             context['columns'] = df
+
+            numerical_columns = list(df.select_dtypes(include=['number']).columns)
+            non_numerical_columns = [col for col in df.columns if col not in numerical_columns]
+            if numerical_columns:
+                context['numerical'] = numerical_columns
+            if non_numerical_columns:
+                context['nonumerical'] = non_numerical_columns
+            
             
             selected_chart_key = request.POST.get('selected_chart')
             print(selected_chart_key)
@@ -103,11 +133,18 @@ def show(request):
             print("hello")
             selected_columns = request.POST.getlist('selected_columns')
             print('Selected Columns:', selected_columns)
+            if selected_columns[0] in numerical_columns:
+                context['stats1'] = calculate_statistics(df,selected_columns[0])
+
+            if selected_columns[1] in numerical_columns:
+                context['stats2'] = calculate_statistics(df,selected_columns[1])
+           
             if selected_columns:
                 if selected_columns != 'all':
                     context['datahtml'] = df[selected_columns]
             df = context['datahtml']
             import plotly.express as px
+
 
             if selected_chart_key == 'Line_Plot':
 

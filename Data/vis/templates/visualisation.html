@@ -7,6 +7,32 @@
 {% block content %}
 {% load static %}
 
+ <script>
+            function confirmSubmission() {
+                var columnsNotInNumerical = {{ nonumerical|safe }};
+                console.log("hello")
+                console.log(columnsNotInNumerical);
+                var selectedColumns = document.querySelectorAll('input[name="selected_columns"]:checked');
+                var selectedColumnsArray = Array.from(selectedColumns).map(input => input.value);
+                console.log(selectedColumnsArray);
+
+                var invalidColumns = columnsNotInNumerical.filter(column => selectedColumnsArray.includes(column));
+                console.log(invalidColumns);
+
+                if (invalidColumns.length > 0) {
+                  console.log("hello");
+                    var confirmation = confirm("Some selected columns are not in the 'numerical' list. Do you still want to submit?");
+                    if (confirmation) {
+                        document.getElementById("myForm").submit();
+                    }
+                    else return false;
+                } else {
+                    document.getElementById("myForm").submit();
+                }
+                
+            }
+        </script>
+
     <div class="az-content az-content-dashboard">
       <div class="container">
         <div class="az-content-body">
@@ -49,9 +75,28 @@
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
                 </div>
-                <div id="link-dropdown" class="dropdown-box">
+                 <div id="link-dropdown" class="dropdown-box">
                   <!-- Content for the Link dropdown goes here -->
-                  Link Dropdown Content
+                 <form method="post" action="{% url 'uploadlink' %}" class="form">
+                     {% csrf_token %}
+                  <label for="dropdown1">Link</label>
+                  <input class="form-control" id="dropdown1" name="dropdown1" placeholder="Link">
+
+
+                  <label>
+                      <input type="radio" name="choice" value="html" checked> HTML
+                  </label>
+
+                  <label>
+                      <input type="radio" name="choice" value="link"> Link
+                  </label>
+
+                  <br>
+
+                   <button style="margin-bottom: 50px;margin-top: 10px;" type="submit" class="btn btn-primary">Submit</button>
+
+                  
+                  </form>
                 </div>
                
               </div>
@@ -79,7 +124,7 @@
                     <div class="m-3">
                       
                       {% if lendata %}
-      <form method="post" action="{% url 'showV' %}" class="form">
+      <form method="post" action="{% url 'showV' %}" class="form" onsubmit="return confirmSubmission()">
         {% csrf_token %}
 
 
@@ -109,7 +154,10 @@
             id="{{ column }}"
           />
           <label class="form-check-label" for="{{ column }}">
-            {{ column }}
+            {{ column }} 
+            {% if column in numerical %}
+                <span style="color: red; font-size: small;">numerical</span>
+            {% endif %}
           </label>
         </div>
         {% endfor %}
@@ -145,10 +193,31 @@
                {{ image | safe }}
         {% endif %}
       </div>
+
+    
           </div>
+
               </div><!-- card -->
             </div><!-- col -->
           </div><!-- row -->
+
+
+          <div>
+          {% if stats1 %}
+
+               {{ stats1 | safe }}
+        {% endif %}
+
+        </div>
+
+        <div>
+
+        {% if stats2 %}
+
+               {{ stats2 | safe }}
+        {% endif %}
+
+        </div>
   {% endif %}
         
         </div><!-- az-content-body -->
@@ -180,6 +249,9 @@
         alert('{{ error_message|escapejs }}');
     '{% endif %}'
 </script>
+
+
+  
 
 {% endblock %}
 

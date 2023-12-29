@@ -194,7 +194,11 @@ def list_uploaded_files(request):
             context['columns'] = df
         
     
+        numerical_columns = list(df.select_dtypes(include=['number']).columns)
+        if numerical_columns:
+            context['numerical'] = numerical_columns
 
+               
     
         selected_columns = request.POST.getlist('selected_columns')
     
